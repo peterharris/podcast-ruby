@@ -1,45 +1,29 @@
-# <item>
-#     <title>Rest of Faith</title>
-#     <link>http://christ-chapel.org/Audio/2012-04-01%20Rest%20of%20Faith%208.30%20am%20-%20Doc%20Shell.mp3</link>
-#     <itunes:author>Doc Shell</itunes:author>
-#     <description>8:30am Service</description>
-#     <itunes:summary>Sunday 8:30am Service</itunes:summary>
-#     <enclosure url="http://christ-chapel.org/Audio/2012-04-01%20Rest%20of%20Faith%208.30%20am%20-%20Doc%20Shell.mp3" 
-#		length="67450745" type="audio/mpeg"/>
-#     <guid>http://christ-chapel.org/Audio/2012-04-01%20Rest%20of%20Faith%208.30%20am%20-%20Doc%20Shell.mp3</guid>
-#     <pubDate>Sun, 01 Apr 2012 08:30:00 CST</pubDate>
-#     <itunes:duration>46:50</itunes:duration>
-#     <itunes:keywords>Christ Chapel, Doc Shell</itunes:keywords>
-#     <category>Podcasts</category>
-#     <itunes:explicit>no</itunes:explicit>
-# </item>
-
-#Media file link: 
-#ftp://christ-chapel.org//christ-chapel.org/Audio/2012-04-04%20Romans%20Pt%2011%207.00%20pm%20-%20Jimmy%20Hayes,%20David%20Keyser.mp3
+# testing out different gems for different ideas
+# unused gems have been commented out
 require 'rubygems'
 require 'highline/import'
 require 'chronic'
-require 'mp3info'
-require 'open-uri'
-require 'uri'
-require 'net/http'
-require 'pp'
+# require 'mp3info'
+# require 'open-uri'
+# require 'uri'
+# require 'net/http'
+# require 'pp'
 
 	lastEntry = ask "Last entry? (y or n): "
-		
+	
+	# continues with prompts if not last entry	
 	if lastEntry == 'n' #continue
 		
 		title = ask "Title text: "
 		link = ask "Media link: "
-		author = ask "Speaker (D or d - Doc Shell, j or J - Jimmy Hayes, dr or Dr - Dr. David Keyser): "
+		author = ask "Speaker (shortcuts for usual speakers are: D or d - Doc Shell, j or J - Jimmy Hayes, dr or Dr - Dr. David Keyser): "
 		serviceDate = ask "Date of service: "	
-		serviceDay = Chronic::parse(serviceDate)
-		serviceDay = serviceDay.strftime("%A")
-		serviceTime = ask "Time of service (8 - 8:30am, 10 - 10:30am, 7 - 7:00pm): "
+		serviceTime = ask "Time of service (shortcuts for common times are: 8 - 8:30am, 10 - 10:30am, 7 - 7:00pm): "
 		mediaLength = ask "Size of media file?: "
 		duration = ask "Duration: "
 		
-		
+		# author shortcut
+		# if author is not listed, enter full name
 		if author == "d" or author == "D"
 				author = "Doc Shell"
 			elsif author == "j" or author == "J"
@@ -48,6 +32,8 @@ require 'pp'
 				author = "Dr. David Keyser"
 		end
 		
+		# service time shortcut
+		# if service time is not listed, enter full time
 		if serviceTime == "8"
 				serviceTime = "8:30am"
 			elsif serviceTime == "10"
@@ -56,11 +42,19 @@ require 'pp'
 				serviceTime = "7:00pm"
 		end	
 		
+		# modify link to correct format
 		link["ftp://christ-chapel.org"] = "http:"
+		
+		# parses serviceDay from serviceDate input and converts it to full name of day
+		serviceDay = Chronic::parse(serviceDate)
+		serviceDay = serviceDay.strftime("%A")
+		# parse serviceDate input to actual date
 		pubDate = Chronic::parse(serviceDate)
+		# parse serviceTime input to actual time
 		pubTime = Chronic::parse(serviceTime)
 		
-		
+		# checks to see if link ends with ".mp3"
+		# outputs audio entry if true
 		if link.include? '.mp3' #Audio entry
 			File.open("/Users/peter/Desktop/podcast.xml", "a") do |f| 
 				f.puts "    <item>"
@@ -80,6 +74,8 @@ require 'pp'
 				f.puts
 			end
 		
+		# checks to see if link ends with ".m4v"
+		# outputs video entry if true
 		elsif link.include? '.m4v' #Video entry
 			File.open("/Users/peter/Desktop/podcast.xml", "a") do |f|			 
 				f.puts "    <item>"
@@ -102,7 +98,8 @@ require 'pp'
 			puts "You have not entered a valid media type!"
 			return self
 		end
-		
+	
+	# closes out channel and rss tags	
 	elsif lastEntry == 'y' #close
 		File.open("/Users/peter/Desktop/podcast.xml", "a") do |f|			 
 			f.puts "    </channel>"
