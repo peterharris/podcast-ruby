@@ -1,3 +1,6 @@
+podcast-ruby
+============
+
 This is a personal project for a podcast I manage.
 
 The file path will need to be changed to point to .xml file.
