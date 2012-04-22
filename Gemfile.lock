@@ -1,0 +1,12 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    chronic (0.6.7)
+    highline (1.6.11)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  chronic (~> 0.6.7)
+  highline (~> 1.6.11)
